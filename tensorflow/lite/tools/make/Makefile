@@ -327,9 +327,13 @@ tensorflow/lite/schema/schema_generated.h:
 	@cp -u tensorflow/lite/schema/schema_generated.h.OPENSOURCE tensorflow/lite/schema/schema_generated.h
 
 # Gathers together all the objects we've compiled into a single '.a' archive.
+LIB_OBJS_FILE=/tmp/lib_objs
+
 $(LIB_PATH): tensorflow/lite/schema/schema_generated.h $(LIB_OBJS)
 	@mkdir -p $(dir $@)
-	$(AR) $(ARFLAGS) $(LIB_PATH) $(LIB_OBJS)
+	# $(AR) $(ARFLAGS) $(LIB_PATH) $(LIB_OBJS)
+	$(file >$(LIB_OBJS_FILE), $(LIB_OBJS))
+	xargs $(AR) $(ARFLAGS)P $(LIB_PATH) < $(LIB_OBJS_FILE)
 
 lib: $(LIB_PATH)
 
@@ -351,7 +355,9 @@ label_image: $(LABEL_IMAGE_BINARY)
 
 $(BENCHMARK_LIB) : $(LIB_PATH) $(BENCHMARK_LIB_OBJS)
 	@mkdir -p $(dir $@)
-	$(AR) $(ARFLAGS) $(BENCHMARK_LIB) $(LIB_OBJS) $(BENCHMARK_LIB_OBJS)
+	# $(AR) $(ARFLAGS) $(BENCHMARK_LIB) $(LIB_OBJS) $(BENCHMARK_LIB_OBJS)
+	$(file >$(LIB_OBJS_FILE), $(LIB_OBJS) $(BENCHMARK_LIB_OBJS))
+	xargs $(AR) $(ARFLAGS)P $(BENCHMARK_LIB) < $(LIB_OBJS_FILE)
 
 benchmark_lib: $(BENCHMARK_LIB)
 

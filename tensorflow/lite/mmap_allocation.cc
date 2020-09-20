@@ -14,7 +14,10 @@ limitations under the License.
 ==============================================================================*/
 
 #include <fcntl.h>
-#include <sys/mman.h>
+// #include <sys/mman.h>
+// Replace with mingw mman replacment 
+// https://github.com/witwall/mman-win32
+#include "mman.h"
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
